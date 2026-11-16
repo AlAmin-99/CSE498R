@@ -1,0 +1,19 @@
+# Local Python environment and generated files
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local configuration and macOS metadata
+.env
+.env.*
+!.env.example
+.DS_Store
+
+# Keep downloaded source papers local; version the literature notes.
+research/papers/*.pdf
+
+# Generated synthetic records and private evaluator seeds
+data/generated/
+.pafr-pilot-*/

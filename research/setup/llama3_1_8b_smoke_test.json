@@ -1,0 +1,426 @@
+{
+  "test_kind": "single_local_inference_smoke_test",
+  "started_at_utc": "2026-10-31T17:37:11.102979+00:00",
+  "python": "3.12.13",
+  "architecture": "arm64",
+  "server_url": "http://127.0.0.1:11434",
+  "model": "llama3.1:8b",
+  "server_environment": {
+    "OLLAMA_HOST": "127.0.0.1:11434",
+    "OLLAMA_CONTEXT_LENGTH": "2048",
+    "OLLAMA_NUM_PARALLEL": "1",
+    "OLLAMA_MAX_LOADED_MODELS": "1",
+    "OLLAMA_NO_CLOUD": "1",
+    "OLLAMA_NOPRUNE": "1",
+    "OLLAMA_KEEP_ALIVE": "2m"
+  },
+  "process_memory_sampling_interval_seconds": 1.0,
+  "process_memory_samples": [
+    {
+      "at_utc": "2026-10-31T17:37:11.226079+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 56432
+        }
+      ],
+      "sum_rss_KiB": 56432
+    },
+    {
+      "at_utc": "2026-10-31T17:37:12.307179+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 31008
+        }
+      ],
+      "sum_rss_KiB": 31008
+    },
+    {
+      "at_utc": "2026-10-31T17:37:13.755114+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 11344
+        }
+      ],
+      "sum_rss_KiB": 11344
+    },
+    {
+      "at_utc": "2026-10-31T17:37:14.806035+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 10800
+        }
+      ],
+      "sum_rss_KiB": 10800
+    },
+    {
+      "at_utc": "2026-10-31T17:37:15.851982+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 11024
+        }
+      ],
+      "sum_rss_KiB": 11024
+    },
+    {
+      "at_utc": "2026-10-31T17:37:16.879545+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 38528
+        }
+      ],
+      "sum_rss_KiB": 38528
+    },
+    {
+      "at_utc": "2026-10-31T17:37:17.907274+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 38528
+        }
+      ],
+      "sum_rss_KiB": 38528
+    },
+    {
+      "at_utc": "2026-10-31T17:37:18.932358+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 38528
+        }
+      ],
+      "sum_rss_KiB": 38528
+    },
+    {
+      "at_utc": "2026-10-31T17:37:18.959248+00:00",
+      "processes": [
+        {
+          "pid": 76529,
+          "ppid": 26047,
+          "rss_KiB": 38912
+        }
+      ],
+      "sum_rss_KiB": 38912
+    }
+  ],
+  "server_version": {
+    "version": "0.32.5"
+  },
+  "cached_model": {
+    "name": "llama3.1:8b",
+    "model": "llama3.1:8b",
+    "modified_at": "2026-09-25T14:38:44.305169578+06:00",
+    "size": 4920753328,
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "llama",
+      "families": [
+        "llama"
+      ],
+      "parameter_size": "8.0B",
+      "quantization_level": "Q4_K_M",
+      "context_length": 131072,
+      "embedding_length": 4096
+    },
+    "capabilities": [
+      "completion",
+      "tools"
+    ]
+  },
+  "model_metadata": {
+    "details": {
+      "parent_model": "",
+      "format": "gguf",
+      "family": "llama",
+      "families": [
+        "llama"
+      ],
+      "parameter_size": "8.0B",
+      "quantization_level": "Q4_K_M"
+    },
+    "model_info": {
+      "general.architecture": "llama",
+      "general.basename": "Meta-Llama-3.1",
+      "general.file_type": 15,
+      "general.finetune": "Instruct",
+      "general.languages": null,
+      "general.license": "llama3.1",
+      "general.parameter_count": 8030261312,
+      "general.quantization_version": 2,
+      "general.size_label": "8B",
+      "general.tags": null,
+      "general.type": "model",
+      "llama.attention.head_count": 32,
+      "llama.attention.head_count_kv": 8,
+      "llama.attention.layer_norm_rms_epsilon": 1e-05,
+      "llama.block_count": 32,
+      "llama.context_length": 131072,
+      "llama.embedding_length": 4096,
+      "llama.feed_forward_length": 14336,
+      "llama.rope.dimension_count": 128,
+      "llama.rope.freq_base": 500000,
+      "llama.vocab_size": 128256,
+      "tokenizer.ggml.bos_token_id": 128000,
+      "tokenizer.ggml.eos_token_id": 128009,
+      "tokenizer.ggml.merges": null,
+      "tokenizer.ggml.model": "gpt2",
+      "tokenizer.ggml.pre": "llama-bpe",
+      "tokenizer.ggml.token_type": null,
+      "tokenizer.ggml.tokens": null
+    },
+    "parameters": "stop                           \"<|start_header_id|>\"\nstop                           \"<|end_header_id|>\"\nstop                           \"<|eot_id|>\"",
+    "template": "{{- if or .System .Tools }}<|start_header_id|>system<|end_header_id|>\n{{- if .System }}\n\n{{ .System }}\n{{- end }}\n{{- if .Tools }}\n\nCutting Knowledge Date: December 2023\n\nWhen you receive a tool call response, use the output to format an answer to the orginal user question.\n\nYou are a helpful assistant with tool calling capabilities.\n{{- end }}<|eot_id|>\n{{- end }}\n{{- range $i, $_ := .Messages }}\n{{- $last := eq (len (slice $.Messages $i)) 1 }}\n{{- if eq .Role \"user\" }}<|start_header_id|>user<|end_header_id|>\n{{- if and $.Tools $last }}\n\nGiven the following functions, please respond with a JSON for a function call with its proper arguments that best answers the given prompt.\n\nRespond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}. Do not use variables.\n\n{{ range $.Tools }}\n{{- . }}\n{{ end }}\nQuestion: {{ .Content }}<|eot_id|>\n{{- else }}\n\n{{ .Content }}<|eot_id|>\n{{- end }}{{ if $last }}<|start_header_id|>assistant<|end_header_id|>\n\n{{ end }}\n{{- else if eq .Role \"assistant\" }}<|start_header_id|>assistant<|end_header_id|>\n{{- if .ToolCalls }}\n{{ range .ToolCalls }}\n{\"name\": \"{{ .Function.Name }}\", \"parameters\": {{ .Function.Arguments }}}{{ end }}\n{{- else }}\n\n{{ .Content }}\n{{- end }}{{ if not $last }}<|eot_id|>{{ end }}\n{{- else if eq .Role \"tool\" }}<|start_header_id|>ipython<|end_header_id|>\n\n{{ .Content }}<|eot_id|>{{ if $last }}<|start_header_id|>assistant<|end_header_id|>\n\n{{ end }}\n{{- end }}\n{{- end }}",
+    "capabilities": [
+      "completion",
+      "tools"
+    ],
+    "modified_at": "2026-09-25T14:38:44.305169578+06:00"
+  },
+  "models_before": {
+    "models": []
+  },
+  "memory_before": {
+    "at_utc": "2026-10-31T17:37:11.202861+00:00",
+    "swap": {
+      "exit_code": 0,
+      "stdout": "vm.swapusage: total = 1024.00M  used = 346.31M  free = 677.69M  (encrypted)",
+      "stderr": ""
+    },
+    "vm_stat": {
+      "exit_code": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                     3887.\nPages active:                                 257026.\nPages inactive:                               254111.\nPages speculative:                              1775.\nPages throttled:                                   0.\nPages wired down:                             125355.\nPages purgeable:                                  26.\n\"Translation faults\":                      389710049.\nPages copy-on-write:                        16140513.\nPages zero filled:                         261825710.\nPages reactivated:                          37530917.\nPages purged:                               14554439.\nFile-backed pages:                            159153.\nAnonymous pages:                              353759.\nPages stored in compressor:                   833672.\nPages occupied by compressor:                 366859.\nDecompressions:                             29409185.\nCompressions:                               35810974.\nPageins:                                    17062994.\nPageouts:                                     162387.\nSwapins:                                        3451.\nSwapouts:                                      25236.",
+      "stderr": ""
+    }
+  },
+  "request": {
+    "model": "llama3.1:8b",
+    "prompt": "Using only this fictional policy, answer in exactly three short numbered sentences. Policy: The training budget is USD 300 per employee per year. Manager approval is required before booking. Unused budget does not carry over. Question: What is the budget, what approval is needed, and does unused budget carry over?",
+    "stream": false,
+    "keep_alive": "2m",
+    "options": {
+      "num_ctx": 2048,
+      "num_predict": 96,
+      "temperature": 0,
+      "seed": 42
+    }
+  },
+  "response": {
+    "model": "llama3.1:8b",
+    "created_at": "2026-10-31T17:37:18.925261Z",
+    "response": "Here are the answers:\n\n1. The budget is USD 300 per employee per year.\n2. Manager approval is required before booking training.\n3. No, unused budget does not carry over to the next year.",
+    "done": true,
+    "done_reason": "stop",
+    "context": [
+      128006,
+      882,
+      128007,
+      271,
+      16834,
+      1193,
+      420,
+      44682,
+      4947,
+      11,
+      4320,
+      304,
+      7041,
+      2380,
+      2875,
+      49926,
+      23719,
+      13,
+      11216,
+      25,
+      578,
+      4967,
+      8199,
+      374,
+      20121,
+      220,
+      3101,
+      824,
+      9548,
+      824,
+      1060,
+      13,
+      10790,
+      14765,
+      374,
+      2631,
+      1603,
+      22615,
+      13,
+      87573,
+      8199,
+      1587,
+      539,
+      6920,
+      927,
+      13,
+      16225,
+      25,
+      3639,
+      374,
+      279,
+      8199,
+      11,
+      1148,
+      14765,
+      374,
+      4460,
+      11,
+      323,
+      1587,
+      20604,
+      8199,
+      6920,
+      927,
+      30,
+      128009,
+      128006,
+      78191,
+      128007,
+      271,
+      8586,
+      527,
+      279,
+      11503,
+      1473,
+      16,
+      13,
+      578,
+      8199,
+      374,
+      20121,
+      220,
+      3101,
+      824,
+      9548,
+      824,
+      1060,
+      627,
+      17,
+      13,
+      10790,
+      14765,
+      374,
+      2631,
+      1603,
+      22615,
+      4967,
+      627,
+      18,
+      13,
+      2360,
+      11,
+      20604,
+      8199,
+      1587,
+      539,
+      6920,
+      927,
+      311,
+      279,
+      1828,
+      1060,
+      13
+    ],
+    "total_duration": 7716971000,
+    "load_duration": 4982880834,
+    "prompt_eval_count": 71,
+    "prompt_eval_duration": 564036000,
+    "eval_count": 44,
+    "eval_duration": 2161387000
+  },
+  "client_wall_seconds": 7.725345916987862,
+  "models_after_generation": {
+    "models": [
+      {
+        "name": "llama3.1:8b",
+        "model": "llama3.1:8b",
+        "size": 4992794623,
+        "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "llama",
+          "families": [
+            "llama"
+          ],
+          "parameter_size": "8.0B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-10-31T23:39:18.929834+06:00",
+        "size_vram": 4992794623,
+        "context_length": 2048
+      }
+    ]
+  },
+  "memory_after_generation": {
+    "at_utc": "2026-10-31T17:37:18.934176+00:00",
+    "swap": {
+      "exit_code": 0,
+      "stdout": "vm.swapusage: total = 4096.00M  used = 3146.44M  free = 949.56M  (encrypted)",
+      "stderr": ""
+    },
+    "vm_stat": {
+      "exit_code": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                    82599.\nPages active:                                  78882.\nPages inactive:                                62864.\nPages speculative:                             15473.\nPages throttled:                                   0.\nPages wired down:                             432826.\nPages purgeable:                                 122.\n\"Translation faults\":                      390260071.\nPages copy-on-write:                        16142580.\nPages zero filled:                         262198433.\nPages reactivated:                          37635047.\nPages purged:                               14556883.\nFile-backed pages:                             93533.\nAnonymous pages:                               63686.\nPages stored in compressor:                  1127879.\nPages occupied by compressor:                 336592.\nDecompressions:                             29509007.\nCompressions:                               36230845.\nPageins:                                    17394551.\nPageouts:                                     162510.\nSwapins:                                        3451.\nSwapouts:                                     204444.",
+      "stderr": ""
+    }
+  },
+  "unload_response": {
+    "model": "llama3.1:8b",
+    "created_at": "2026-10-31T17:37:18.987396Z",
+    "response": "",
+    "done": true,
+    "done_reason": "unload"
+  },
+  "models_after_unload": {
+    "models": []
+  },
+  "memory_after_unload": {
+    "at_utc": "2026-10-31T17:37:19.021200+00:00",
+    "swap": {
+      "exit_code": 0,
+      "stdout": "vm.swapusage: total = 4096.00M  used = 3146.44M  free = 949.56M  (encrypted)",
+      "stderr": ""
+    },
+    "vm_stat": {
+      "exit_code": 0,
+      "stdout": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                                   106725.\nPages active:                                  86414.\nPages inactive:                                62706.\nPages speculative:                             15504.\nPages throttled:                                   0.\nPages wired down:                             421772.\nPages purgeable:                                  82.\n\"Translation faults\":                      390262621.\nPages copy-on-write:                        16142951.\nPages zero filled:                         262199211.\nPages reactivated:                          37635047.\nPages purged:                               14556883.\nFile-backed pages:                             93594.\nAnonymous pages:                               71030.\nPages stored in compressor:                  1105982.\nPages occupied by compressor:                 316127.\nDecompressions:                             29509333.\nCompressions:                               36230845.\nPageins:                                    17394627.\nPageouts:                                     162510.\nSwapins:                                        3451.\nSwapouts:                                     204444.",
+      "stderr": ""
+    }
+  },
+  "finished_at_utc": "2026-10-31T17:37:19.025421+00:00",
+  "backend_log_excerpt": [
+    "time=2026-10-31T23:36:05.827+06:00 level=INFO source=types.go:32 msg=\"inference compute\" id=0 filter_id=0 library=Metal compute=0.0 name=MTL0 description=\"Apple M4\" libdirs=ollama driver=0.0 pci_id=\"\" type=iGPU total=\"11.8 GiB\" available=\"11.8 GiB\"",
+    "load_tensors: offloaded 33/33 layers to GPU",
+    "llama_kv_cache: size =  256.00 MiB (  2048 cells,  32 layers,  1/1 seqs), K (f16):  128.00 MiB, V (f16):  128.00 MiB",
+    "sched_reserve:       MTL0 compute buffer size =   102.01 MiB",
+    "sched_reserve:        CPU compute buffer size =    18.01 MiB"
+  ],
+  "measurement_notes": [
+    "One initially unloaded-model request; operating-system disk caches were not cleared. No warm-run latency was measured.",
+    "Ollama /api/ps size and size_vram are reported model allocations, not a measured total-system RAM peak. Apple unified-memory values must not be added together.",
+    "The process sampler matched executables named exactly ollama and captured only one PID. Its RSS values do not describe the complete model runner or Metal allocation and are not used as the model-memory result.",
+    "Swap counters are system-wide snapshots with background applications uncontrolled; the change is observed during the test and cannot be attributed exclusively to the model.",
+    "The prompt used invented policy facts. All three answers matched those facts on manual inspection, but an extra introductory line did not follow the exact requested format.",
+    "No latency distribution, RAG evaluation, privacy evaluation, concurrency test, or sustained thermal test was performed."
+  ]
+}
