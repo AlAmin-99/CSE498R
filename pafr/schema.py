@@ -17,10 +17,16 @@ INJECTION = (
 )
 
 
-def train_ids():
+def split_ids():
+    """Entity IDs for each planned split, fixed by ``SPLIT_SEED``."""
     ids = [f"E{i:04d}" for i in range(1, 241)]
     random.Random(SPLIT_SEED).shuffle(ids)
-    return ids[:PLANNED_SPLITS["train"]]
+    train, dev = PLANNED_SPLITS["train"], PLANNED_SPLITS["dev"]
+    return {"train": ids[:train], "dev": ids[train:train + dev], "test": ids[train + dev:]}
+
+
+def train_ids():
+    return split_ids()["train"]
 
 
 def document_id(fixture, silo, entity):

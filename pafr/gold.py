@@ -55,10 +55,11 @@ def reference_label(case, identities, programs, records):
         return label(case["case_id"], True, "answer", found[0]["fields"]["training_complete"], plans=[[unit]])
 
     found = {s: rows(s) for s in ("hr", "training", "finance")}
-    # Only base eligibility views are generated in v1. Do not choose arbitrarily
-    # between multiple versions when this oracle is used on a custom view.
-    if any(len(rs) > 1 for rs in found.values()):
-        return label(case["case_id"], True, "abstain", reason="conflicting_evidence")
+    # Never choose arbitrarily between conflicting versions: a department with
+    # more than one current record is unavailable evidence. Another department
+    # can still complete a sufficient plan (a single failing condition).
+    conflicted = {s for s, rs in found.items() if len(rs) > 1}
+    found = {s: (rs if len(rs) == 1 else []) for s, rs in found.items()}
     checks = {}
     if found["hr"]:
         fields = found["hr"][0]["fields"]
@@ -82,5 +83,6 @@ def reference_label(case, identities, programs, records):
             answer = cert["eligible"]
             plans.append([policy_unit, evidence("finance", found["finance"][0]["document_id"], f"certificate:{params['program_id']}")])
     if answer is None:
-        return label(case["case_id"], True, "abstain", reason="missing_evidence")
+        reason = "conflicting_evidence" if conflicted else "missing_evidence"
+        return label(case["case_id"], True, "abstain", reason=reason)
     return label(case["case_id"], True, "answer", answer, plans=plans)

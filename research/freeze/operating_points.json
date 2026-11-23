@@ -1,0 +1,783 @@
+{
+  "at_selected_points": {
+    "compositional": {
+      "contrast_B5_vs_B4C": {
+        "control": "B4-C",
+        "criterion": "reconstruction upper CI < 0 and yield lower CI > -0.05",
+        "criterion_met": true,
+        "decision_yield": {
+          "ci95": [
+            0.0391,
+            0.1068
+          ],
+          "difference": 0.0729
+        },
+        "reconstruction_16": {
+          "ci95": [
+            -0.5208,
+            -0.2292
+          ],
+          "difference": -0.375
+        },
+        "targets": 48,
+        "treatment": "B5"
+      },
+      "contrast_B5_vs_B4H": {
+        "control": "B4-H",
+        "criterion": "reconstruction upper CI < 0 and yield lower CI > -0.05",
+        "criterion_met": false,
+        "decision_yield": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "difference": 0.0
+        },
+        "reconstruction_16": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "difference": 0
+        },
+        "targets": 48,
+        "treatment": "B5"
+      },
+      "methods": {
+        "B2": {
+          "calls_per_attempt": 4.125,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 9.736,
+            "hr_observations_per_campaign": 16,
+            "reconstruction_16": 0.0972
+          },
+          "coverage": 1.0,
+          "decision_yield": 1.0,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 11.139,
+          "latency_ms": {
+            "p50": 0.343,
+            "p95": 0.448
+          },
+          "payload_bytes_per_attempt": 1963.3,
+          "reconstruction": {
+            "1": 0.0625,
+            "16": 0.4166666666666667,
+            "2": 0.041666666666666664,
+            "4": 0.3472222222222222,
+            "8": 0.4166666666666667,
+            "no_query": 0.020833333333333332
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 0
+        },
+        "B4": {
+          "calls_per_attempt": 2.871,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 9.736,
+            "hr_observations_per_campaign": 15.278,
+            "reconstruction_16": 0.0972
+          },
+          "coverage": 1.0,
+          "decision_yield": 1.0,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 11.139,
+          "latency_ms": {
+            "p50": 0.177,
+            "p95": 0.361
+          },
+          "payload_bytes_per_attempt": 1401.1,
+          "reconstruction": {
+            "1": 0.0625,
+            "16": 0.4166666666666667,
+            "2": 0.041666666666666664,
+            "4": 0.3472222222222222,
+            "8": 0.4166666666666667,
+            "no_query": 0.020833333333333332
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 0
+        },
+        "B4-C": {
+          "calls_per_attempt": 2.299,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 9.854,
+            "hr_observations_per_campaign": 12.688,
+            "reconstruction_16": 0.125
+          },
+          "coverage": 0.8125,
+          "decision_yield": 0.8125,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 11.167,
+          "latency_ms": {
+            "p50": 0.16,
+            "p95": 0.358
+          },
+          "payload_bytes_per_attempt": 1128.3,
+          "reconstruction": {
+            "1": 0.0625,
+            "16": 0.4166666666666667,
+            "2": 0.041666666666666664,
+            "4": 0.3472222222222222,
+            "8": 0.4166666666666667,
+            "no_query": 0.020833333333333332
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 432
+        },
+        "B4-H": {
+          "calls_per_attempt": 2.488,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 10.688,
+            "hr_observations_per_campaign": 13.604,
+            "reconstruction_16": 0.0417
+          },
+          "coverage": 0.8854,
+          "decision_yield": 0.8854,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 13.007,
+          "latency_ms": {
+            "p50": 0.164,
+            "p95": 0.362
+          },
+          "payload_bytes_per_attempt": 1221.8,
+          "reconstruction": {
+            "1": 0.0625,
+            "16": 0.041666666666666664,
+            "2": 0.041666666666666664,
+            "4": 0.041666666666666664,
+            "8": 0.041666666666666664,
+            "no_query": 0.020833333333333332
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 264
+        },
+        "B5": {
+          "calls_per_attempt": 2.884,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 14.396,
+            "hr_observations_per_campaign": 7.625,
+            "reconstruction_16": 0.0417
+          },
+          "coverage": 0.8854,
+          "decision_yield": 0.8854,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 13.007,
+          "latency_ms": {
+            "p50": 0.263,
+            "p95": 0.372
+          },
+          "payload_bytes_per_attempt": 1385.3,
+          "reconstruction": {
+            "1": 0.0625,
+            "16": 0.041666666666666664,
+            "2": 0.041666666666666664,
+            "4": 0.041666666666666664,
+            "8": 0.041666666666666664,
+            "no_query": 0.020833333333333332
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 264
+        }
+      }
+    },
+    "controlled": {
+      "contrast_B5_vs_B4C": {
+        "control": "B4-C",
+        "criterion": "reconstruction upper CI < 0 and yield lower CI > -0.05",
+        "criterion_met": true,
+        "decision_yield": {
+          "ci95": [
+            -0.0352,
+            0.0117
+          ],
+          "difference": -0.0117
+        },
+        "reconstruction_16": {
+          "ci95": [
+            -0.9375,
+            -0.75
+          ],
+          "difference": -0.8542
+        },
+        "targets": 48,
+        "treatment": "B5"
+      },
+      "contrast_B5_vs_B4H": {
+        "control": "B4-H",
+        "criterion": "reconstruction upper CI < 0 and yield lower CI > -0.05",
+        "criterion_met": false,
+        "decision_yield": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "difference": 0.0
+        },
+        "reconstruction_16": {
+          "ci95": [
+            0.0,
+            0.0
+          ],
+          "difference": 0
+        },
+        "targets": 48,
+        "treatment": "B5"
+      },
+      "methods": {
+        "B2": {
+          "calls_per_attempt": 4.125,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 1,
+            "hr_observations_per_campaign": 16,
+            "reconstruction_16": 1
+          },
+          "coverage": 1.0,
+          "decision_yield": 1.0,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 1,
+          "latency_ms": {
+            "p50": 0.336,
+            "p95": 0.436
+          },
+          "payload_bytes_per_attempt": 1919.4,
+          "reconstruction": {
+            "1": 0.1875,
+            "16": 1,
+            "2": 0.14583333333333334,
+            "4": 0.7638888888888888,
+            "8": 1,
+            "no_query": 0.041666666666666664
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 0
+        },
+        "B4": {
+          "calls_per_attempt": 2.992,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 1,
+            "hr_observations_per_campaign": 15.604,
+            "reconstruction_16": 1
+          },
+          "coverage": 1.0,
+          "decision_yield": 1.0,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 1,
+          "latency_ms": {
+            "p50": 0.174,
+            "p95": 0.361
+          },
+          "payload_bytes_per_attempt": 1424.6,
+          "reconstruction": {
+            "1": 0.1875,
+            "16": 1,
+            "2": 0.14583333333333334,
+            "4": 0.7638888888888888,
+            "8": 1,
+            "no_query": 0.041666666666666664
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 0
+        },
+        "B4-C": {
+          "calls_per_attempt": 2.382,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 1,
+            "hr_observations_per_campaign": 12.833,
+            "reconstruction_16": 1
+          },
+          "coverage": 0.8125,
+          "decision_yield": 0.8125,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 1,
+          "latency_ms": {
+            "p50": 0.157,
+            "p95": 0.352
+          },
+          "payload_bytes_per_attempt": 1141.0,
+          "reconstruction": {
+            "1": 0.1875,
+            "16": 1,
+            "2": 0.14583333333333334,
+            "4": 0.7638888888888888,
+            "8": 1,
+            "no_query": 0.041666666666666664
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 432
+        },
+        "B4-H": {
+          "calls_per_attempt": 2.371,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 5,
+            "hr_observations_per_campaign": 12.417,
+            "reconstruction_16": 0.1458
+          },
+          "coverage": 0.8008,
+          "decision_yield": 0.8008,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 5,
+          "latency_ms": {
+            "p50": 0.162,
+            "p95": 0.367
+          },
+          "payload_bytes_per_attempt": 1134.5,
+          "reconstruction": {
+            "1": 0.1875,
+            "16": 0.14583333333333334,
+            "2": 0.14583333333333334,
+            "4": 0.14583333333333334,
+            "8": 0.14583333333333334,
+            "no_query": 0.041666666666666664
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 459
+        },
+        "B5": {
+          "calls_per_attempt": 3.151,
+          "campaigns": 144,
+          "conditional_accuracy": 1.0,
+          "contradictions": 0,
+          "coordinator": {
+            "final_candidate_bands_mean": 5,
+            "hr_observations_per_campaign": 11.917,
+            "reconstruction_16": 0.1458
+          },
+          "coverage": 0.8008,
+          "decision_yield": 0.8008,
+          "direct_disclosure": {
+            "coordinator": 0,
+            "requester": 0
+          },
+          "final_candidate_bands_mean": 5,
+          "latency_ms": {
+            "p50": 0.343,
+            "p95": 0.439
+          },
+          "payload_bytes_per_attempt": 1469.4,
+          "reconstruction": {
+            "1": 0.1875,
+            "16": 0.14583333333333334,
+            "2": 0.14583333333333334,
+            "4": 0.14583333333333334,
+            "8": 0.14583333333333334,
+            "no_query": 0.041666666666666664
+          },
+          "surprises": 0,
+          "unexpected_denials": 0,
+          "withheld": 459
+        }
+      }
+    }
+  },
+  "created_utc": "2026-11-23T11:36:23+00:00",
+  "grids": {
+    "B4-C": {
+      "count_limit": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    },
+    "B5": {
+      "k": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ]
+    }
+  },
+  "primary_comparison_available": true,
+  "rule": {
+    "order": [
+      "lowest reconstruction_16",
+      "higher decision_yield",
+      "fewer calls_per_attempt",
+      "lower parameter value"
+    ],
+    "target_yield": 0.8,
+    "yield_band": [
+      0.75,
+      0.85
+    ]
+  },
+  "sample_size_check": {
+    "dev_ci95_width": {
+      "decision_yield": 0.0469,
+      "reconstruction_16": 0.1875
+    },
+    "dev_targets": 48,
+    "note": "Development CI widths for the primary contrast with 48 targets; the test split also has 48."
+  },
+  "seeds": [
+    11,
+    22,
+    33
+  ],
+  "selected": {
+    "B4-C": {
+      "count_limit": 13
+    },
+    "B4-H": {
+      "inherited_from": "B5",
+      "k": 3
+    },
+    "B5": {
+      "k": 3
+    }
+  },
+  "split": "dev",
+  "status": "exploratory development results; not confirmatory",
+  "stratum": "controlled",
+  "sweep": {
+    "B4-C": [
+      {
+        "calls_per_attempt": 0.193,
+        "decision_yield": 0.0625,
+        "final_candidate_bands_mean": 10,
+        "parameter": "count_limit",
+        "reconstruction_16": 0.1875,
+        "value": 1
+      },
+      {
+        "calls_per_attempt": 0.401,
+        "decision_yield": 0.125,
+        "final_candidate_bands_mean": 5,
+        "parameter": "count_limit",
+        "reconstruction_16": 0.14583333333333334,
+        "value": 2
+      },
+      {
+        "calls_per_attempt": 0.584,
+        "decision_yield": 0.1875,
+        "final_candidate_bands_mean": 2.625,
+        "parameter": "count_limit",
+        "reconstruction_16": 0.3611111111111111,
+        "value": 3
+      },
+      {
+        "calls_per_attempt": 0.781,
+        "decision_yield": 0.25,
+        "final_candidate_bands_mean": 1.458,
+        "parameter": "count_limit",
+        "reconstruction_16": 0.7638888888888888,
+        "value": 4
+      },
+      {
+        "calls_per_attempt": 0.945,
+        "decision_yield": 0.3125,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 5
+      },
+      {
+        "calls_per_attempt": 1.089,
+        "decision_yield": 0.375,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 6
+      },
+      {
+        "calls_per_attempt": 1.263,
+        "decision_yield": 0.4375,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 7
+      },
+      {
+        "calls_per_attempt": 1.438,
+        "decision_yield": 0.5,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 8
+      },
+      {
+        "calls_per_attempt": 1.619,
+        "decision_yield": 0.5625,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 9
+      },
+      {
+        "calls_per_attempt": 1.804,
+        "decision_yield": 0.625,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 10
+      },
+      {
+        "calls_per_attempt": 1.997,
+        "decision_yield": 0.6875,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 11
+      },
+      {
+        "calls_per_attempt": 2.19,
+        "decision_yield": 0.75,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 12
+      },
+      {
+        "calls_per_attempt": 2.382,
+        "decision_yield": 0.8125,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 13
+      },
+      {
+        "calls_per_attempt": 2.579,
+        "decision_yield": 0.875,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 14
+      },
+      {
+        "calls_per_attempt": 2.776,
+        "decision_yield": 0.9375,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 15
+      },
+      {
+        "calls_per_attempt": 2.992,
+        "decision_yield": 1.0,
+        "final_candidate_bands_mean": 1,
+        "parameter": "count_limit",
+        "reconstruction_16": 1,
+        "value": 16
+      }
+    ],
+    "B5": [
+      {
+        "calls_per_attempt": 3.953,
+        "decision_yield": 1.0,
+        "final_candidate_bands_mean": 1,
+        "parameter": "k",
+        "reconstruction_16": 1,
+        "value": 1
+      },
+      {
+        "calls_per_attempt": 3.657,
+        "decision_yield": 0.9258,
+        "final_candidate_bands_mean": 2.625,
+        "parameter": "k",
+        "reconstruction_16": 0.3611111111111111,
+        "value": 2
+      },
+      {
+        "calls_per_attempt": 3.151,
+        "decision_yield": 0.8008,
+        "final_candidate_bands_mean": 5,
+        "parameter": "k",
+        "reconstruction_16": 0.14583333333333334,
+        "value": 3
+      },
+      {
+        "calls_per_attempt": 3.151,
+        "decision_yield": 0.8008,
+        "final_candidate_bands_mean": 5,
+        "parameter": "k",
+        "reconstruction_16": 0.14583333333333334,
+        "value": 4
+      },
+      {
+        "calls_per_attempt": 3.151,
+        "decision_yield": 0.8008,
+        "final_candidate_bands_mean": 5,
+        "parameter": "k",
+        "reconstruction_16": 0.14583333333333334,
+        "value": 5
+      },
+      {
+        "calls_per_attempt": 2.051,
+        "decision_yield": 0.5234,
+        "final_candidate_bands_mean": 10,
+        "parameter": "k",
+        "reconstruction_16": 0.1875,
+        "value": 6
+      },
+      {
+        "calls_per_attempt": 2.051,
+        "decision_yield": 0.5234,
+        "final_candidate_bands_mean": 10,
+        "parameter": "k",
+        "reconstruction_16": 0.1875,
+        "value": 7
+      },
+      {
+        "calls_per_attempt": 2.051,
+        "decision_yield": 0.5234,
+        "final_candidate_bands_mean": 10,
+        "parameter": "k",
+        "reconstruction_16": 0.1875,
+        "value": 8
+      },
+      {
+        "calls_per_attempt": 2.051,
+        "decision_yield": 0.5234,
+        "final_candidate_bands_mean": 10,
+        "parameter": "k",
+        "reconstruction_16": 0.1875,
+        "value": 9
+      },
+      {
+        "calls_per_attempt": 2.051,
+        "decision_yield": 0.5234,
+        "final_candidate_bands_mean": 10,
+        "parameter": "k",
+        "reconstruction_16": 0.1875,
+        "value": 10
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 11
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 12
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 13
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 14
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 15
+      },
+      {
+        "calls_per_attempt": 0,
+        "decision_yield": 0.0,
+        "final_candidate_bands_mean": 20,
+        "parameter": "k",
+        "reconstruction_16": 0.041666666666666664,
+        "value": 16
+      }
+    ]
+  }
+}
