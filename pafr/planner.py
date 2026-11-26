@@ -54,8 +54,12 @@ def plan_question(question):
     text = _normalize(question)
     if text is None:
         return None
-    if _self_training(text):
-        return QueryPlan("training_status", "self", None, None, (TRAINING_STATUS_CALL,))
+    self_training = _self_training(text)
+    if self_training is not None:
+        # A named employee is only a claim; the router accepts it solely when
+        # it equals the trusted identity's own employee ID.
+        claimed = self_training or None
+        return QueryPlan("training_status", "self", claimed, None, (TRAINING_STATUS_CALL,))
     program = _public_policy(text)
     if program is not None:
         return QueryPlan("public_policy", "none", None, program, (_program_call(POLICY_CALL, program),))
@@ -84,12 +88,16 @@ def _normalize(question):
 
 
 def _self_training(text):
-    return re.fullmatch(
+    """Return ``""`` for a plain self question, a claimed ID, or ``None``."""
+    match = re.fullmatch(
         r"(?:training|my training(?: status)?|is my training complete|"
         r"have i completed (?:my )?training|what is my training status|"
-        r"(?:show|check)(?: me)? my training(?: status)?)",
+        r"(?:show|check)(?: me)? my training(?: status)?)(?: for (e\d{4}))?",
         text,
-    ) is not None
+    )
+    if match is None:
+        return None
+    return match[1].upper() if match[1] else ""
 
 
 def _public_policy(text):
@@ -104,8 +112,8 @@ def _public_policy(text):
 
 def _eligibility(text):
     match = re.fullmatch(
-        r"(?:does|is) (e\d{4}) (?:qualify|eligible) for (p\d{2})|"
-        r"(?:assess|check eligibility for) (e\d{4}) for (p\d{2})",
+        r"(?:does|is) (?:fictional employee |employee )?(e\d{4}) (?:qualify|eligible) for (?:program )?(p\d{2})|"
+        r"(?:assess|check eligibility for) (?:fictional employee |employee )?(e\d{4}) for (?:program )?(p\d{2})",
         text,
     )
     if not match:

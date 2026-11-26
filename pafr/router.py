@@ -7,10 +7,12 @@ work. Departments still repeat authorization for every call.
 """
 
 from dataclasses import dataclass
+import json
 
-from .history import DisclosureHistory
+from .history import DisclosureHistory, ReleaseGate
 from .planner import QueryPlan, ServiceCall, plan_question
 from .retriever import DocumentIndex
+from .sealing import require_unsealed
 from .services import (
     FinanceService, HRService, Identity, PolicyService, RetrievalReply,
     RetrievalRequest, TrainingService,
@@ -36,6 +38,29 @@ class RouterReply:
     evidence: tuple[dict, ...] = ()
     reason: str | None = None
     service_calls: int = 0
+    # Coordinator view: every departmental reply the coordinator observed,
+    # including replies not needed for the final answer. Never shown to a
+    # requester; used to measure coordinator exposure.
+    observations: tuple[dict, ...] = ()
+
+
+@dataclass(frozen=True)
+class RoutingPolicy:
+    """Order in which eligibility evidence is requested after the public rule.
+
+    ``steps`` lists ``certificate``, ``hr``, ``training`` and ``finance`` in
+    request order. Sequential routing stops at the first sufficient plan;
+    ``broadcast`` requests every step and then selects one sufficient plan.
+    """
+
+    name: str
+    steps: object  # callable: program_id -> tuple[str, ...]
+    broadcast: bool = False
+
+
+STATIC_STEPS = ("certificate", "hr", "training", "finance")
+STATIC_ROUTING = RoutingPolicy("static", lambda program: STATIC_STEPS)
+_STEP_DEPARTMENTS = {"certificate": "finance", "hr": "hr", "training": "training", "finance": "finance"}
 
 
 @dataclass(frozen=True)
@@ -50,7 +75,12 @@ class RouterMethod:
 class FederatedRouter:
     """Execute only the planner's static, permitted pilot service calls."""
 
-    def __init__(self, data_dir, history=None):
+    def __init__(self, data_dir, history=None, unseal=False, routing=None):
+        require_unsealed(data_dir, unseal)
+        self.last_payload_bytes = 0  # set per request; trusted diagnostics only
+        self.routing = STATIC_ROUTING if routing is None else routing
+        if not isinstance(self.routing, RoutingPolicy):
+            raise TypeError("routing must be a RoutingPolicy")
         self._services = {
             "hr": HRService(data_dir),
             "training": TrainingService(data_dir),
@@ -58,8 +88,8 @@ class FederatedRouter:
             "policy": PolicyService(data_dir),
         }
         self.history = DisclosureHistory() if history is None else history
-        if not isinstance(self.history, DisclosureHistory):
-            raise TypeError("history must be a DisclosureHistory instance")
+        if not isinstance(self.history, ReleaseGate):
+            raise TypeError("history must be a ReleaseGate instance")
 
     def handle(self, question, context):
         """Plan, bind, and route one question without using an LLM."""
@@ -75,6 +105,7 @@ class FederatedRouter:
         manually constructed a ``QueryPlan``. Production callers should use
         ``handle``; this method permits deterministic router tests.
         """
+        self.last_payload_bytes = 0
         if not isinstance(plan, QueryPlan) or not self._valid_context(context):
             return RouterReply("deny", reason="not_authorized")
         target = self._bound_target(plan, context)
@@ -95,7 +126,13 @@ class FederatedRouter:
             self.history.record(decision, "abstain")
             return RouterReply("abstain", reason="exposure_limit")
         result = self._eligibility(plan, context, target)
-        self.history.record(decision, result.action)
+        if (result.action == "answer" and getattr(self.history, "post_answer", False)
+                and not self.history.release_ok(decision, result.answer)):
+            # Non-simulatable comparator only: the refusal depends on the answer.
+            self.history.withhold(decision)
+            return RouterReply("abstain", reason="exposure_limit", service_calls=result.service_calls,
+                               observations=result.observations)
+        self.history.record(decision, result.action, result.answer if result.action == "answer" else None)
         return result
 
     @staticmethod
@@ -118,7 +155,8 @@ class FederatedRouter:
             return (None if plan.target_mode == "none" and plan.target_id is None
                     and context.purpose == "public_policy" else _DENIED)
         if plan.operation == "training_status":
-            if (plan.target_mode == "self" and plan.target_id is None
+            if (plan.target_mode == "self"
+                    and (plan.target_id is None or plan.target_id == identity.employee_id)
                     and identity.role == "employee" and context.purpose == "self_service"
                     and type(identity.employee_id) is str):
                 return identity.employee_id
@@ -140,7 +178,9 @@ class FederatedRouter:
             operation=call.operation,
             parameters=call.parameter_dict(),
         )
-        return self._services[call.department].retrieve(request)
+        reply = self._services[call.department].retrieve(request)
+        self.last_payload_bytes += _payload_bytes(call.department, request, reply)
+        return reply
 
     def _public_policy(self, plan, context):
         reply = self._call(plan.candidate_calls[0], context, None)
@@ -155,47 +195,62 @@ class FederatedRouter:
         policy = self._call(calls[0], context, None)
         if policy.status != "answer":
             return _finish_single(policy, 1)
-
-        # P07/P15 may have a policy-version-checked, single-silo certificate.
-        # It is a valid alternative evidence plan, so do not unnecessarily read
-        # HR or Training when it answers the authorized decision.
+        by_step = {"hr": calls[1], "training": calls[2], "finance": calls[3]}
         certificate = next((call for call in calls if call.operation == "eligibility_certificate"), None)
-        call_count = 1
         if certificate is not None:
-            cert_reply = self._call(certificate, context, target)
-            call_count += 1
-            if cert_reply.status == "deny":
-                return RouterReply("deny", reason="not_authorized", service_calls=call_count)
-            if cert_reply.status == "answer":
-                return RouterReply("answer", cert_reply.value, policy.evidence + cert_reply.evidence, service_calls=call_count)
+            by_step["certificate"] = certificate
+        steps = tuple(self.routing.steps(plan.program_id))
+        if sorted(set(steps)) != sorted(STATIC_STEPS) or len(steps) != len(STATIC_STEPS):
+            raise ValueError("Routing policy must order exactly the four evidence steps")
+        steps = tuple(step for step in steps if step in by_step)
 
-        # A missing certificate is expected: it is an optional alternative to
-        # the three-condition path, not a required piece of evidence.
-        pending_abstention = False
-        # A single false condition is sufficient to answer false. Otherwise all
-        # three primary conditions are needed to answer true.
-        facts = []
-        for call in (calls[1], calls[2], calls[3]):
-            reply = self._call(call, context, target)
-            call_count += 1
+        replies, observations = {}, []
+        for step in steps:
+            reply = self._call(by_step[step], context, target)
+            replies[step] = reply
+            observations.append({"department": _STEP_DEPARTMENTS[step], "step": step,
+                                 "status": reply.status, "value": reply.value})
             if reply.status == "deny":
-                return RouterReply("deny", reason="not_authorized", service_calls=call_count)
-            if reply.status == "answer" and reply.value is False:
-                return RouterReply("answer", False, policy.evidence + reply.evidence, service_calls=call_count)
-            if reply.status == "abstain":
-                pending_abstention = True
-            else:
-                facts.append(reply)
-        if pending_abstention or len(facts) != 3 or not all(reply.value is True for reply in facts):
-            return RouterReply("abstain", reason="evidence_unavailable", service_calls=call_count)
-        return RouterReply("answer", True, policy.evidence + tuple(unit for reply in facts for unit in reply.evidence), service_calls=call_count)
+                return RouterReply("deny", reason="not_authorized", service_calls=1 + len(replies),
+                                   observations=tuple(observations))
+            if not self.routing.broadcast and _sufficient(replies):
+                break
+        return _decide(policy, replies, 1 + len(replies), tuple(observations))
+
+
+def _sufficient(replies):
+    """True once the replies so far complete one sufficient evidence plan."""
+    certificate = replies.get("certificate")
+    if certificate is not None and certificate.status == "answer":
+        return True
+    conditions = [replies.get(step) for step in ("hr", "training", "finance")]
+    if any(r is not None and r.status == "answer" and r.value is False for r in conditions):
+        return True
+    return all(r is not None and r.status == "answer" and r.value is True for r in conditions)
+
+
+def _decide(policy, replies, call_count, observations):
+    """Select one sufficient plan: certificate, then a failing condition, then all true."""
+    def reply(action, answer=None, evidence=(), reason=None):
+        return RouterReply(action, answer, evidence, reason, call_count, observations)
+
+    certificate = replies.get("certificate")
+    if certificate is not None and certificate.status == "answer":
+        return reply("answer", certificate.value, policy.evidence + certificate.evidence)
+    conditions = [replies.get(step) for step in ("hr", "training", "finance")]
+    for condition in conditions:
+        if condition is not None and condition.status == "answer" and condition.value is False:
+            return reply("answer", False, policy.evidence + condition.evidence)
+    if all(c is not None and c.status == "answer" and c.value is True for c in conditions):
+        return reply("answer", True, policy.evidence + tuple(u for c in conditions for u in c.evidence))
+    return reply("abstain", reason="evidence_unavailable")
 
 
 class AdaptiveRouter(FederatedRouter):
     """Optional risk-aware extension that uses local document relevance before release."""
 
-    def __init__(self, data_dir, history=None, risk_threshold=1.0, retriever=None):
-        super().__init__(data_dir, history=history)
+    def __init__(self, data_dir, history=None, risk_threshold=1.0, retriever=None, unseal=False):
+        super().__init__(data_dir, history=history, unseal=unseal)
         self.retriever = DocumentIndex(data_dir) if retriever is None else retriever
         if not isinstance(self.retriever, DocumentIndex):
             raise TypeError("retriever must be a DocumentIndex instance")
@@ -237,6 +292,19 @@ class AdaptiveRouter(FederatedRouter):
             relevance = sum(item["score"] for item in hits) / len(hits)
             risk += min(0.30, relevance / 12.0)
         return min(1.0, risk)
+
+
+def _payload_bytes(department, request, reply):
+    """Application payload volume at one fixed JSON boundary (not network traffic)."""
+    message = {
+        "to": department,
+        "request": {"request_id": request.request_id, "requester_id": request.identity.requester_id,
+                    "role": request.identity.role, "fixture": request.fixture, "purpose": request.purpose,
+                    "target_id": request.target_id, "operation": request.operation, "parameters": request.parameters},
+        "reply": {"status": reply.status, "operation": reply.operation, "value": reply.value,
+                  "evidence": list(reply.evidence), "reason": reply.reason},
+    }
+    return len(json.dumps(message, sort_keys=True, separators=(",", ":")).encode("utf-8"))
 
 
 def _finish_single(reply, calls):

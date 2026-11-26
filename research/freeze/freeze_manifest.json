@@ -1,0 +1,130 @@
+{
+  "created_utc": "2026-11-23T11:58:49+00:00",
+  "environment": {
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "python": "3.12.13"
+  },
+  "git": {
+    "clean": false,
+    "head": "15a0f9434f9904b524a8293fe9d0f894d392efdb",
+    "uncommitted": [
+      "M pafr/analysis.py",
+      " M pafr/attack.py",
+      " M pafr/demo.py",
+      " M pafr/freeze.py",
+      " M pafr/history.py",
+      " M pafr/methods.py",
+      " M pafr/router.py",
+      " M pafr/tuning.py",
+      " M pafr/web.py",
+      " M pafr/web_static/index.html",
+      " M research/design/evaluation_protocol.md",
+      " M research/freeze/operating_points.json"
+    ]
+  },
+  "llm": {
+    "digest": "46e0c10c039e019119339687c3c1757cc81b9da49709a3b3924863ba87ca666e",
+    "model": "llama3.1:8b",
+    "options": {
+      "num_ctx": 2048,
+      "num_predict": 96,
+      "seed": 42,
+      "temperature": 0
+    }
+  },
+  "operating_points": {
+    "B4-C": {
+      "count_limit": 13
+    },
+    "B4-H": {
+      "inherited_from": "B5",
+      "k": 3
+    },
+    "B4-N": {
+      "inherited_from": "B5",
+      "k": 3
+    },
+    "B5": {
+      "k": 3
+    }
+  },
+  "protocol": {
+    "amendment": "Amendment 1 (2026-11-23, pre-freeze)",
+    "criterion": "reconstruction upper CI < 0 and decision-yield lower CI > -0.05",
+    "document": "research/design/evaluation_protocol.md",
+    "key_secondary": [
+      "B5 vs B4-N reconstruction (denial leakage), both strata",
+      "B5 vs B4-H coordinator HR observations (routing effect), compositional stratum",
+      "B5 vs B4-C reconstruction, compositional stratum"
+    ],
+    "primary_contrast": "B5 vs B4-C at attempt 16, controlled stratum"
+  },
+  "run": {
+    "attempts": 16,
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 498
+    },
+    "llm_called_in_campaigns": false,
+    "methods": [
+      "B2",
+      "B4",
+      "B4-C",
+      "B4-H",
+      "B4-N",
+      "B5"
+    ],
+    "prefixes": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "seeds": [
+      11,
+      22,
+      33
+    ],
+    "strata": [
+      "controlled",
+      "compositional"
+    ]
+  },
+  "sha256": {
+    "data/generated/full/dev/evaluator/manifest.json": "b27dca57c03a9d7f5704a3fc24403006dc6f07119f50ca5bedd2c17ce664512e",
+    "data/generated/full/manifest.json": "a11571523dd10c1d78992fe27b7b3581bee220c40d4635a9c0ecdf84d9b5dbb7",
+    "data/generated/full/test/evaluator/manifest.json": "750f458c6b6fd9d90f83da468baf31fb18ed29ab298ccb313c07c0605323e9a9",
+    "data/generated/full/train/evaluator/manifest.json": "fd6a72ebbbff07ee9c95f98eb70338303594c145d0d64f6374c961afe6d363f5",
+    "data/generated/models/routing_model.json": "98744c5d342f350ecf729ae4d141521e17290f138ceca881a9312fbaa9c585fe",
+    "pafr/__init__.py": "8287f7496d6211ba8038315b954dd4292f03854cd386fe1fe0eff78025054359",
+    "pafr/analysis.py": "f70d857a2ea06c25eb47bdf2c734382ea1826323153dfc4f59164972c69e8a52",
+    "pafr/attack.py": "09adec1dbddcf751096e10cbaee455079ca12f972e7e3dee43bca9afc14bb914",
+    "pafr/dataset.py": "6f659961fdf7c167f45beee291eb9ee0c173e179d57733b06631c22d2007a2d6",
+    "pafr/dataset_validation.py": "6b9f86a84915a06a8b395367378e6f264bb13f60f59e4680ef31b86a768438de",
+    "pafr/demo.py": "559bf8a4dafc26af4b54f6339854efcc3bc122be592a479016c3ef0d47d477b6",
+    "pafr/endtoend.py": "9406fa529fcb136cb32677d2fed15cf15cbb0829a6cba1b183b5db6cdf6f567d",
+    "pafr/final_run.py": "63f2335235e8a3f2510b6f6fb847fb6bab0fdf9e7ea83f52757ac46c173f7f69",
+    "pafr/freeze.py": "35ccba53c5d6eaf459a5cae1ceb2d76d1026b6246235c07535663156b5f93f94",
+    "pafr/gold.py": "b7ef5a46b333066e4f131663b8e4748c8c7c0351cd59593800a828e83dd1bb62",
+    "pafr/history.py": "cf0c8dd8825f5c9c41084f7d605c44d9688f886b3692e6baee29c0b3aeab0e03",
+    "pafr/methods.py": "304aa32184f3c23151c97355a806d25d963e97433721f9c68caf2c7a6ae15461",
+    "pafr/ollama.py": "fb7d9b84fe2a7ba456ddd8775ac30199e25cf9f28a6415eb939c671ce28303e9",
+    "pafr/pilot.py": "d8e3c9ad8097b61cdd6e6c84a747201bb437870d993e0c08637e86cb8e885bcd",
+    "pafr/planner.py": "1cd3bd95b8960b278b571b5113152f441dad167c57bb1703f019c0e91d1029f0",
+    "pafr/release.py": "bf892c583ed537cd605a9ec61a39edcd995e6b66c097fb0fdc5edee5dcca2745",
+    "pafr/retriever.py": "b701cbe4bcb1c145dbea59420bb38bb76a2316a6b4357a2f03de08b8f296f8f8",
+    "pafr/router.py": "4e7d6034f12fa77a884662a6568d13b07c7bbc44ec1e1ff3a2e2afd2159eed9d",
+    "pafr/routing_model.py": "8f18459c94fe4ad78d0be4733ed5499988ccc156c8fcca9de87df6db78b48072",
+    "pafr/schema.py": "fee2e42553e0ded12fbca56fa9a502c5a805e20d3ce2c04eb08479076c05fc4d",
+    "pafr/sealing.py": "bb73ebe7c1684ae48b536dd82da2611736d77a33fa863721814730f394f58e1c",
+    "pafr/services.py": "047e28f674d7047b2c58150037d5772817f207dfb8029add562076bd1a91b638",
+    "pafr/tuning.py": "df45c18bafd3c5da5ec909498c6444c7196c905a58f937f5a02e8180aea679a8",
+    "pafr/validation.py": "0a62b626ca64ecfb1bba6b8874f515852f17ba506f3274c25564630f01676923",
+    "pafr/web.py": "565e0b350f4150c95e456fd54ffe95e9f8697f45d44b6c9514d312254855ad72",
+    "pafr/web_static/index.html": "030a8776cfe214cdb5201774971179725278bb5e5da39927a3ed7256c04558ec",
+    "research/design/evaluation_protocol.md": "82f51cb827de3218df4132a47e11c86b3190780673091f7c7b3a699d1066ef2b",
+    "research/freeze/operating_points.json": "94a66047ed6a8e8653c0b8b961527b6e94ed83c3bc31269054d981e53ee5c1c2"
+  },
+  "status": "candidate"
+}

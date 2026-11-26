@@ -11,7 +11,7 @@ import json
 from pathlib import Path
 import re
 
-from .schema import POLICY_VERSION, evidence
+from .schema import PLANNED_SPLITS, POLICY_VERSION, evidence
 
 
 class ServiceError(ValueError):
@@ -138,7 +138,7 @@ class DepartmentService:
                 row = json.loads(line)
                 if row.get("entity_id") == request.target_id:
                     if (row.get("fixture") != request.fixture or row.get("silo") != self.silo
-                            or row.get("split") != "train" or type(row.get("fields")) is not dict):
+                            or row.get("split") not in PLANNED_SPLITS or type(row.get("fields")) is not dict):
                         raise ValueError("Invalid department record.")
                     matches.append(row)
         return matches

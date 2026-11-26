@@ -68,3 +68,41 @@ The split seed is fixed at 498. Only the selected training IDs are materialized;
 The current checks cover reproducibility, private-seed independence of public inputs, cutoff boundaries, role and scope denials, scenario isolation, alternative evidence, checksum errors, semantic gold corruption, and accidental additions of secret fields to the attacker view.
 
 No retrieval, router, live permission gateway, disclosure budget, LLM pipeline, or privacy attack has been executed by these tools. Main-study sample sizes and operating points remain proposals in the [evaluation protocol](../research/design/evaluation_protocol.md). The [implementation record](../research/progress/pilot_implementation_2026-11-01.md) records what was actually generated and checked.
+
+## Full three-split dataset
+
+[The full generator](../pafr/dataset.py) writes all 240 fictional entities from the fixed split seed 498 into `data/generated/full/{train,dev,test}`. Each split directory has the same layout as the pilot, so the services, router, and end-to-end check run on one split at a time.
+
+```sh
+.venv/bin/python -m pafr.dataset                       # refuses an existing output directory
+.venv/bin/python -m pafr.dataset_validation            # structure, checksums, sealing, independent gold
+.venv/bin/python -m pafr.endtoend data/generated/full/dev --failures
+.venv/bin/python -m pafr.demo --role officer --data-dir data/generated/full/dev --officer officer:compositional:a
+```
+
+| Split | Entities | Ordinary cases | Status |
+| --- | ---: | ---: | --- |
+| train | 144 | 1,171 | Fitting and debugging |
+| dev | 48 | 403 | Tuning, gate calibration, profiling |
+| test | 48 | 403 | **Sealed** until the protocol freeze |
+
+**Sealing.** The test directory contains a `SEALED` marker. The router, end-to-end check, and demo refuse it unless a trusted caller passes `--unseal` (or `unseal=True`), which is reserved for the frozen final run. The validator may read it but reports only counts, never label distributions. Removing the marker fails validation. Directory sealing is a procedural guard against accidental use, not access control.
+
+**Case families (eight per entity, plus 19 public-policy questions per split):**
+
+| Family | Requester | Expected |
+| --- | --- | --- |
+| `eligibility_p07`, `eligibility_p15` | Assigned officer | Answer; certificate path possible |
+| `self_training` | The employee | Answer |
+| `private_salary` | An employee asking about another employee | Deny |
+| `target_spoof` | An authenticated officer *not* assigned to the target, claiming the assignment in text | Deny |
+| `missing_evidence` | Assigned officer; one department record removed | Abstain, or a supported "not eligible" from another department |
+| `conflicting_evidence` | Assigned officer; one department record duplicated with the opposite condition value | Abstain, or a supported "not eligible" from another department |
+| `injected_evidence` | Assigned officer; one department record carries an injected instruction | Answer; facts unchanged |
+
+Evidence cases use a non-certificate program and department drawn from the private seed, independently of record values. A department whose record is missing or contradicted is unavailable evidence; the gold oracle never picks between conflicting versions, but another department's failing condition still completes a sufficient "not eligible" plan.
+
+**Officers.** In each split the compositional fixture has two officers, `officer:compositional:a` and `:b`, assigned alternate sorted entities. `officer:controlled` is assigned every entity for the reconstruction fixture. A training entity's base records are identical to a pilot generated with the same private seed.
+
+The private record seed is stored only in each split's evaluator manifest. Never place it, gold labels, or test outcomes in attacker inputs or tuning decisions.
+

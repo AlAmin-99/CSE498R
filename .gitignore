@@ -17,3 +17,6 @@ research/papers/*.pdf
 # Generated synthetic records and private evaluator seeds
 data/generated/
 .pafr-pilot-*/
+
+# Local reference documents (proposals, progress reports) - never pushed
+Documents/
