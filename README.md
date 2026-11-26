@@ -1,6 +1,6 @@
 # PAFR research workspace
 
-CSE498R research workspace for PAFR. A synthetic training pilot and an employee terminal demo are runnable. The demo checks permissions, looks up a permitted training fact or public program rules, and requests a checked answer from local Llama through Ollama. Fail-closed single-silo services, a deterministic allowlist planner, a local federated router, and a final template-based release check are available for HR, Training, Finance, and public Policy. The router has a process-local configurable count gate for distinct eligibility decisions; it is not yet the planned persistent adaptive exposure-risk control. Semantic retrieval, adaptive routing, and comparative privacy experiments remain pending.
+CSE498R research workspace for PAFR (Privacy-Aware Federated RAG). A coordinator answers permitted eligibility questions over four simulated departments (HR, Training, Finance, Policy) through an allowlist planner, permission checks, fail-closed department services, a disclosure gate, and a template release check; local Llama 3.1 8B (Ollama) only chooses approved wording. Six protocol methods (B2, B4, B4-C, B4-H, B4-N, B5/PAFR) are implemented, together with a synthetic train/dev/test dataset (test sealed), a frozen adaptive reconstruction attacker, paired bootstrap analysis, a predeclared development sweep, a freeze package, and a local web demo. Development results are exploratory; the confirmatory run on the sealed test split has not been done yet. Semantic (embedding) retrieval is deferred to future work.
 
 ## Run the terminal demo
 
@@ -73,7 +73,7 @@ Try `Does E0001 qualify for P12?`, `Assess E0001 for P07.`, `What are the rules 
 
 Every labelled pilot case runs through the router and release check with a fresh history and is compared with the independent gold labels (action, answer, and a valid evidence plan). Results are reported for canonical wording (`structured`) and the dataset's original questions (`natural`). Scenario overlays are applied to a temporary copy; the corpus is not changed. On the current pilot both modes pass 211/211. This is a functional check, not a privacy evaluation.
 
-## Run the protocol methods (B2, B4, B4-C, B4-H, B5)
+## Run the protocol methods (B2, B4, B4-C, B4-H, B4-N, B5)
 
 The five evaluation-protocol methods ([pafr/methods.py](pafr/methods.py)) share the planner, authorization, services, and release check, and differ only in routing and the disclosure gate:
 
@@ -83,6 +83,7 @@ The five evaluation-protocol methods ([pafr/methods.py](pafr/methods.py)) share 
 | B4 | Learned relevance (fewest expected calls) | None |
 | B4-C | Learned relevance | Count limit (`--count-limit`, 1-16) |
 | B4-H | Learned relevance | PAFR candidate-set gate (same `--k` as B5) |
+| B4-N | Learned relevance | Naive gate that checks the true answer before refusing (same `--k`); refusals leak, by design |
 | B5 (PAFR) | Exposure-aware: certificate, then Training/Finance, HR last | Candidate-set gate (`--k`) |
 
 The **candidate-set gate** tracks which of the 20 salary bands are still consistent with the eligibility answers a requester has already received about a target. It releases a new program decision only if either possible answer leaves at least `k` bands; answers already determined by earlier ones are always released. The decision uses only the requester's own transcript and the public cutoffs, so a refusal reveals nothing new. It is a heuristic disclosure control under a stated requester model, not a formal privacy guarantee.

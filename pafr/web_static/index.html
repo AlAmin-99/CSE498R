@@ -94,7 +94,7 @@ main { max-width: 1680px; margin: 0 auto; padding: 22px 28px 40px; }
 select { width: 100%; padding: 9px 30px 9px 11px; border: 1px solid var(--border-strong); border-radius: 10px; background-color: var(--surface);
   appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
   background-position: calc(100% - 16px) 52%, calc(100% - 11px) 52%; background-size: 5px 5px; background-repeat: no-repeat; }
-.mgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.mgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .mtile { border: 1px solid var(--border); background: var(--surface-2); border-radius: 10px; padding: 8px 4px; font-weight: 700; font-size: 13px;
   color: var(--text-2); position: relative; transition: border-color .15s, background .15s; }
 .mtile:hover { border-color: var(--border-strong); }
@@ -363,6 +363,7 @@ const METHODS = {
   B4: { short: "B4", name: "B4 · Learned", routing: "Learned order, fewest calls", gate: null, gateText: "None" },
   "B4-C": { short: "B4-C", name: "B4-C · Count limit", routing: "Learned order, fewest calls", gate: "limit", gateText: "Count limit" },
   "B4-H": { short: "B4-H", name: "B4-H · Learned + gate", routing: "Learned order, fewest calls", gate: "k", gateText: "Candidate-set gate" },
+  "B4-N": { short: "B4-N", name: "B4-N · Naive gate", routing: "Learned order, fewest calls", gate: "k", gateText: "Naive gate: checks the true answer first, so refusals leak" },
   B5: { short: "B5", name: "B5 · PAFR", routing: "Certificate first, HR last", gate: "k", gateText: "Candidate-set gate", proposed: true },
 };
 const BOUNDS = { k: [1, 20], limit: [1, 16], "a-k": [1, 20], "a-limit": [1, 16] };
@@ -639,7 +640,7 @@ $("a-truth").onchange = renderAttack;
 $("a-run").onclick = async () => {
   if (!state.aMethods.size) return;
   $("a-run").disabled = true; $("a-error").hidden = true;
-  const order = ["B2", "B4", "B4-C", "B4-H", "B5"];
+  const order = ["B2", "B4", "B4-C", "B4-H", "B4-N", "B5"];
   try {
     state.attack = await api("/api/attack", { dataset: state.aDataset, target: $("a-target").value,
       methods: order.filter((m) => state.aMethods.has(m)), k: Number($("a-k").value), limit: Number($("a-limit").value) });

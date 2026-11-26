@@ -9,6 +9,9 @@ after it, ``snapshot`` for trusted diagnostics):
     Never withholds (methods B2 and B4).
 ``DisclosureHistory``
     Count limit on distinct released decisions (method B4-C).
+``NaiveAuditGate``
+    A non-simulatable comparator (method B4-N) that consults the true answer
+    before refusing, so its refusals leak information.
 ``CandidateSetGate``
     PAFR's gate (methods B4-H and B5). It tracks which salary bands remain
     consistent with the eligibility answers this requester has already
@@ -251,6 +254,40 @@ class CandidateSetGate(ReleaseGate):
         if not candidates or not candidates <= set(BAND_DOMAIN):
             raise ValueError("Invalid stored candidate set")
         bucket.candidates = candidates
+
+
+class NaiveAuditGate(CandidateSetGate):
+    """Deliberately *non-simulatable* comparator (method B4-N).
+
+    It looks at the true answer before deciding: release only if the
+    requester would still have at least ``k`` candidate bands after learning
+    it. Because the refusal depends on the hidden answer, a refusal itself
+    tells the requester that the true side of the split is small. This is the
+    textbook flaw that simulatable auditing (Kenthapadi, Mishra and Nissim,
+    PODS 2005) avoids; it exists only to measure that leak.
+    """
+
+    post_answer = True
+
+    def _allowed(self, bucket, key):
+        return not bucket.pending  # decided after routing, see release_ok
+
+    def release_ok(self, decision, answer):
+        """Called by the router with the true answer before release."""
+        with self._lock:
+            bucket = self._buckets.setdefault(decision.scope, self._new_bucket())
+            cutoff = _cutoff(decision.key)
+            side = {b for b in bucket.candidates if (b <= cutoff) is answer}
+            return decision.duplicate or not side or side == bucket.candidates or len(side) >= self.k
+
+    def withhold(self, decision):
+        """Record a post-answer refusal as withheld."""
+        with self._lock:
+            bucket = self._buckets.setdefault(decision.scope, self._new_bucket())
+            bucket.attempts += 1
+            bucket.withheld += 1
+            bucket.pending.discard(decision.key)
+            self._save()
 
 
 def _cutoff(key):

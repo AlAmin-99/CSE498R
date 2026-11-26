@@ -187,6 +187,7 @@ def _gate_label(method, k, limit):
         return f"static pilot router, count limit {limit}"
     return {"B2": "broadcast, no gate", "B4": "learned routing, no gate",
             "B4-C": f"learned routing, count limit {limit}", "B4-H": f"learned routing, candidate-set gate k={k}",
+            "B4-N": f"learned routing, naive answer-dependent gate k={k}",
             "B5": f"PAFR: exposure-aware routing, candidate-set gate k={k}"}[method]
 
 

@@ -25,6 +25,7 @@ from urllib.request import ProxyHandler, build_opener
 
 from .analysis import BOOTSTRAP_RESAMPLES, BOOTSTRAP_SEED, YIELD_MARGIN
 from .attack import ATTEMPTS, DEFAULT_SEEDS, PREFIXES
+from .methods import METHOD_IDS
 from .ollama import MODEL
 from .schema import checksum, write_json
 from .validation import read_json
@@ -80,10 +81,14 @@ def create():
     manifest = {
         "created_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "status": "candidate",
-        "protocol": {"document": str(PROTOCOL.relative_to(ROOT)), "primary_contrast": "B5 vs B4-C at attempt 16, controlled stratum",
+        "protocol": {"document": str(PROTOCOL.relative_to(ROOT)), "amendment": "Amendment 1 (2026-11-23, pre-freeze)",
+                     "primary_contrast": "B5 vs B4-C at attempt 16, controlled stratum",
+                     "key_secondary": ["B5 vs B4-N reconstruction (denial leakage), both strata",
+                                       "B5 vs B4-H coordinator HR observations (routing effect), compositional stratum",
+                                       "B5 vs B4-C reconstruction, compositional stratum"],
                      "criterion": f"reconstruction upper CI < 0 and decision-yield lower CI > {YIELD_MARGIN}"},
         "operating_points": points["selected"],
-        "run": {"methods": ["B2", "B4", "B4-C", "B4-H", "B5"], "strata": ["controlled", "compositional"],
+        "run": {"methods": list(METHOD_IDS), "strata": ["controlled", "compositional"],
                 "seeds": list(DEFAULT_SEEDS), "attempts": ATTEMPTS, "prefixes": list(PREFIXES),
                 "bootstrap": {"resamples": BOOTSTRAP_RESAMPLES, "seed": BOOTSTRAP_SEED}, "llm_called_in_campaigns": False},
         "llm": {"model": MODEL, "digest": llm_digest(), "options": LLM_OPTIONS},

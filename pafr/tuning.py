@@ -8,7 +8,7 @@ Predeclared grids (fixed before the sweep, recorded in the output):
 
 * B4-C count limit: 1..16
 * B5 candidate-set ``k``: 1..16  (at most 16 privacy operating points)
-* B4-H inherits B5's selected ``k`` unchanged.
+* B4-H and B4-N inherit B5's selected ``k`` unchanged.
 
 Selection rule, applied identically to B4-C and B5 on the primary
 (controlled) stratum: keep settings whose campaign decision yield lies in the
@@ -23,7 +23,8 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 
-from .analysis import method_metrics, paired_contrast
+from .analysis import coordinator_contrast, method_metrics, paired_contrast
+from .methods import METHOD_IDS
 from .attack import DEFAULT_SEEDS, run
 from .routing_model import load_model
 from .schema import write_json
@@ -80,6 +81,7 @@ def tune(dev_dir, model_path, seeds=DEFAULT_SEEDS):
             "B4-C": chosen["B4-C"] and {"count_limit": chosen["B4-C"]["value"]},
             "B5": chosen["B5"] and {"k": chosen["B5"]["value"]},
             "B4-H": chosen["B5"] and {"k": chosen["B5"]["value"], "inherited_from": "B5"},
+            "B4-N": chosen["B5"] and {"k": chosen["B5"]["value"], "inherited_from": "B5"},
         },
         "primary_comparison_available": all(chosen.values()),
     }
@@ -89,14 +91,16 @@ def tune(dev_dir, model_path, seeds=DEFAULT_SEEDS):
         for fixture in ("controlled", "compositional"):
             campaigns = []
             truths = None
-            for method in ("B2", "B4", "B4-C", "B4-H", "B5"):
+            for method in METHOD_IDS:
                 c, truths = run(dev_dir, [method], model, seeds=seeds, count_limit=limit, k=k, fixture=fixture)
                 campaigns += c
             strata[fixture] = {
                 "methods": {m: method_metrics([c for c in campaigns if c.method == m], truths)
-                            for m in ("B2", "B4", "B4-C", "B4-H", "B5")},
+                            for m in METHOD_IDS},
                 "contrast_B5_vs_B4C": paired_contrast(campaigns, truths, "B5", "B4-C"),
+                "contrast_B5_vs_B4N": paired_contrast(campaigns, truths, "B5", "B4-N"),
                 "contrast_B5_vs_B4H": paired_contrast(campaigns, truths, "B5", "B4-H"),
+                "routing_effect_B5_vs_B4H": coordinator_contrast(campaigns, "B5", "B4-H"),
             }
         result["at_selected_points"] = strata
         contrast = strata["controlled"]["contrast_B5_vs_B4C"]

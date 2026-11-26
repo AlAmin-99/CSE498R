@@ -80,5 +80,36 @@ class FreezeTests(unittest.TestCase):
             self.assertEqual(freeze.verify(), ["operating points differ from the freeze"])
 
 
+
+class NaiveGateTests(unittest.TestCase):
+    """B4-N exists to show that answer-dependent refusals leak."""
+
+    def test_same_transcript_different_truth_gives_different_refusals(self):
+        from pafr.history import NaiveAuditGate
+        decisions = {}
+        for answer in (True, False):
+            gate = NaiveAuditGate(k=4)
+            first = gate.check("o", "controlled", "E1", "eligibility", {"program_id": "P10"})
+            gate.record(first, "answer", False)                        # bands 11..20
+            probe = gate.check("o", "controlled", "E1", "eligibility", {"program_id": "P12"})
+            decisions[answer] = gate.release_ok(probe, answer)          # yes -> {11,12}, no -> 13..20
+        self.assertEqual(decisions, {True: False, False: True})          # refusal reveals "yes"
+
+    def test_attacker_exploits_naive_refusals_but_not_simulatable_ones(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "full"
+            generate_dataset(root, record_seed=78)
+            model = fit(root / "train")
+            naive, truths = run(root / "dev", ["B4-N"], model, seeds=(11,), k=3)
+            safe, _ = run(root / "dev", ["B5"], model, seeds=(11,), k=3)
+        self.assertGreater(sum(a["surprise"] for c in naive for a in c.attempts), 0)
+        self.assertEqual(sum(a["surprise"] for c in safe for a in c.attempts), 0)
+        recovered = lambda cs: sum(c.attempts[-1]["guess"] == truths[c.target_id] for c in cs)
+        self.assertGreater(recovered(naive), recovered(safe))
+        for c in naive:                                                  # leak never yields a wrong belief
+            self.assertIn(truths[c.target_id], range(1, 21))
+            self.assertEqual(sum(r["contradiction"] for r in c.evaluator), 0)
+
+
 if __name__ == "__main__":
     unittest.main()

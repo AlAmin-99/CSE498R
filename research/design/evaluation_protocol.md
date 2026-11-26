@@ -164,3 +164,21 @@ Any observed direct leak or authorization bypass is a reported failure; the prot
 The report should contain the data and permission summary, ordinary task results, reconstruction-versus-yield curves, the predeclared primary contrast, routing and gate ablations, separate coordinator observations, cost measurements, and failure examples. Report negative findings and synthetic-data limitations. Additional literature screening was skipped at the user's request; publication novelty remains unconfirmed, and Stage 1 is not automatically complete.
 
 The next proposed implementation step is a small synthetic-data generator and independent gold-label checks, initially using the training-only pilot. It requires separate user approval because the earlier work was restricted to documents. No generator, test data, experiments, model download, or research dependency installation was performed while writing this protocol.
+
+## Amendment 1 — 23 November 2026 (before freeze and before any test access)
+
+Recorded before the freeze manifest was finalized and before the sealed test split was opened. No test outcome informed these changes. Development results that motivated them are in `research/freeze/operating_points.json`.
+
+**A1. Primary contrast unchanged; its expected outcome is stated.** The primary contrast stays B5 versus B4-C at attempt 16 on the controlled stratum. Development runs show that any count limit large enough to reach the 75–85% yield band (limit ≥ 12) lets the adaptive attacker recover every band, because about five answers suffice for a binary search over 20 bands. A positive primary result is therefore expected and is reported as confirming that count limits do not bound reconstruction, not as the paper's main novelty.
+
+**A2. New comparator B4-N and three key secondary contrasts.** B4-N uses B4's learned routing and B5's threshold `k`, but decides whether to release *after* seeing the true answer (a non-simulatable auditor). It isolates the value of refusals that reveal nothing. The attacker knows each method's public behavior; against B4-N it uses refusals as evidence. Key secondary contrasts, reported with paired target-bootstrap intervals and not as additional confirmatory claims:
+
+1. B5 versus B4-N reconstruction at attempt 16, both strata (does simulatability matter?).
+2. B5 versus B4-H coordinator HR observations per campaign, compositional stratum (routing effect, separated from the shared gate).
+3. B5 versus B4-C reconstruction at attempt 16, compositional stratum.
+
+**A3. Conflicting-evidence rule.** When one department holds conflicting current records for a target, that department is treated as unavailable evidence; another department's failing condition can still complete a sufficient "not eligible" plan. The oracle never chooses between conflicting versions. This follows the protocol's rule that completing any one sufficient plan is enough, and avoids forcing a router to contact every department (which would increase exposure). It changed no pilot label.
+
+**A4. Informative yield.** Campaign decision yield counts answers to questions that earlier answers already determine. A secondary **informative yield** reports correct released decisions only on attempts whose answer was not determined by the requester's earlier answers. The primary yield definition and the operating-point rule are unchanged. Ordinary-task utility (withheld answerable cases in the end-to-end check) is reported alongside.
+
+**Framing.** B5's gate is an instance of simulatable auditing (Kenthapadi, Mishra and Nissim, PODS 2005). The project's contribution is framed as applying simulatable auditing to permitted-decision queries in federated RAG routing, combined with exposure-aware routing and an evaluation that separates the gate's effect from the routing's effect on coordinator exposure. See `research/literature/novelty_check_2026-11-23.md`.

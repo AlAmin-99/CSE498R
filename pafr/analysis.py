@@ -101,6 +101,9 @@ def method_metrics(campaigns, truths):
         "reconstruction": {"no_query": mean(_guess(BAND_DOMAIN) == truths[c.target_id] for c in campaigns), **per_prefix},
         "final_candidate_bands_mean": round(mean(c.attempts[-1]["candidate_bands"] for c in campaigns), 3),
         "decision_yield": round(correct / len(records), 4),
+        # Secondary: yield on questions whose answer earlier answers did not
+        # already determine (under the requester's model).
+        "informative_yield": _informative_yield(campaigns),
         "coverage": round(len(released) / len(attempts), 4),
         "conditional_accuracy": round(correct / len(released), 4) if released else None,
         "withheld": sum(r["reason"] == "exposure_limit" for r in records),
@@ -117,6 +120,31 @@ def method_metrics(campaigns, truths):
             "final_candidate_bands_mean": round(mean(size for _, size in coord), 3),
         },
     }
+
+
+def _informative_yield(campaigns):
+    pairs = [(a, r) for c in campaigns for a, r in zip(c.attempts, c.evaluator) if not a.get("determined", False)]
+    return round(sum(r["released_correct"] for _, r in pairs) / len(pairs), 4) if pairs else None
+
+
+def coordinator_contrast(campaigns, treatment="B5", control="B4-H"):
+    """Paired target bootstrap of coordinator HR observations per campaign."""
+    def per_target(method):
+        grouped = {}
+        for c in campaigns:
+            if c.method == method:
+                grouped.setdefault(c.target_id, []).append(sum(r["coordinator_hr_observations"] for r in c.evaluator))
+        return {t: mean(v) for t, v in grouped.items()}
+    a, b = per_target(treatment), per_target(control)
+    targets = sorted(set(a) & set(b))
+    if not targets:
+        return None
+    diffs = [a[t] - b[t] for t in targets]
+    rng = random.Random(BOOTSTRAP_SEED)
+    boot = [mean(diffs[rng.randrange(len(diffs))] for _ in diffs) for _ in range(BOOTSTRAP_RESAMPLES)]
+    return {"treatment": treatment, "control": control, "targets": len(targets),
+            "metric": "coordinator HR observations per campaign",
+            "difference": round(mean(diffs), 4), "ci95": [round(_percentile(boot, 0.025), 4), round(_percentile(boot, 0.975), 4)]}
 
 
 def _per_target(campaigns, truths):
@@ -154,11 +182,13 @@ def paired_contrast(campaigns, truths, treatment="B5", control="B4-C"):
 
 
 def analyze(campaigns, truths):
-    methods = sorted({c.method for c in campaigns}, key=lambda m: ("B2", "B4", "B4-C", "B4-H", "B5").index(m))
+    methods = sorted({c.method for c in campaigns}, key=lambda m: ("B2", "B4", "B4-C", "B4-H", "B4-N", "B5").index(m))
     summary = {"methods": {m: method_metrics([c for c in campaigns if c.method == m], truths) for m in methods}}
     contrasts = {}
-    for treatment, control in (("B5", "B4-C"), ("B5", "B4-H"), ("B4-H", "B4-C")):
+    for treatment, control in (("B5", "B4-C"), ("B5", "B4-N"), ("B5", "B4-H"), ("B4-H", "B4-C")):
         if treatment in methods and control in methods:
             contrasts[f"{treatment} vs {control}"] = paired_contrast(campaigns, truths, treatment, control)
     summary["contrasts"] = contrasts
+    if "B5" in methods and "B4-H" in methods:
+        summary["routing_effect"] = coordinator_contrast(campaigns, "B5", "B4-H")
     return summary

@@ -319,7 +319,8 @@ def _officer_main(parser, args):
         gate = f"limit: {args.limit} decisions per employee"
     else:
         gate = {"B2": "no gate", "B4": "no gate", "B4-C": f"count limit {args.limit}",
-                "B4-H": f"candidate-set gate k={args.k}", "B5": f"candidate-set gate k={args.k}"}[args.method]
+                "B4-H": f"candidate-set gate k={args.k}",
+                "B4-N": f"naive answer-dependent gate k={args.k}", "B5": f"candidate-set gate k={args.k}"}[args.method]
         gate = f"method {args.method} | {gate}"
     print(f"PAFR terminal demo | fictional benefits officer | fixture: {args.fixture} | "
           f"{len(targets)} assigned employees | {gate}")

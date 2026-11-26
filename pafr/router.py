@@ -126,6 +126,12 @@ class FederatedRouter:
             self.history.record(decision, "abstain")
             return RouterReply("abstain", reason="exposure_limit")
         result = self._eligibility(plan, context, target)
+        if (result.action == "answer" and getattr(self.history, "post_answer", False)
+                and not self.history.release_ok(decision, result.answer)):
+            # Non-simulatable comparator only: the refusal depends on the answer.
+            self.history.withhold(decision)
+            return RouterReply("abstain", reason="exposure_limit", service_calls=result.service_calls,
+                               observations=result.observations)
         self.history.record(decision, result.action, result.answer if result.action == "answer" else None)
         return result
 

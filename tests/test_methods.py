@@ -140,7 +140,7 @@ class MethodTests(unittest.TestCase):
                                    router_factory=lambda view: build_method(method, view, self.model, k=4))
                 self.assertEqual([r for r in results if not r.passed and not r.withheld], [])
                 withheld = sum(r.withheld for r in results)
-                self.assertEqual(withheld > 0, method in ("B4-H", "B5"))
+                self.assertEqual(withheld > 0, method in ("B4-H", "B4-N", "B5"))
 
     def test_gate_and_routing_tradeoffs(self):
         def totals(method):

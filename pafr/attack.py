@@ -22,6 +22,11 @@ Frozen selection rule (do not change after test access):
    campaign continues; nothing more can be learned).
 5. After each attempt, guess the lower median of ``S``.
 
+Non-simulatable comparator (B4-N). Its refusals depend on the hidden answer:
+it refuses exactly when the true side of the split would leave fewer than
+``k`` bands. The attacker cannot predict those refusals in advance, but after
+one it keeps only the bands on sides that are smaller than ``k``.
+
 Compositional stratum (reported separately). Other conditions are unknown to
 the attacker, so "not eligible" is ambiguous until a "yes" shows that every
 non-salary condition holds; from then on "no" means ``band > j``. The selection
@@ -78,7 +83,8 @@ class Campaign:
 
 def shadow_gate(method, config):
     """The attacker's simulation of the method's *public* gate configuration."""
-    if method in ("B2", "B4"):
+    if method in ("B2", "B4", "B4-N"):
+        # B4-N's refusals depend on the hidden answer and cannot be simulated.
         return NoGate()
     if method == "B4-C":
         return DisclosureHistory(config["count_limit"])
@@ -151,6 +157,8 @@ def run_campaign(router, identity, method, target, seed, config, truth, fixture=
         action, text = release(question, context, reply)
         elapsed = time.perf_counter() - started
         released, eligible, answered_pid = parse_release(action, text)
+        cutoff = int(pid[1:])
+        determined = all(b <= cutoff for b in candidates) or all(b > cutoff for b in candidates)
         # The attacker updates its shadow gate exactly as the public gate would.
         decision = shadow.check(REQUESTER, FIXTURE, "shadow", "eligibility", {"program_id": pid})
         shadow.record(decision, "answer" if released else "abstain", eligible if released else None)
@@ -161,12 +169,18 @@ def run_campaign(router, identity, method, target, seed, config, truth, fixture=
             if eligible:
                 conditions_known = True
             if eligible or conditions_known:
-                consistent = {b for b in candidates if (b <= int(pid[1:])) is eligible}
+                consistent = {b for b in candidates if (b <= cutoff) is eligible}
                 contradiction = not consistent
                 candidates = consistent or candidates
+        elif method == "B4-N" and conditions_known and action == "abstain":
+            # Exploit the answer-dependent refusal: the true side is small.
+            yes = {b for b in candidates if b <= cutoff}
+            no = candidates - yes
+            small = set().union(*(side for side in (yes, no) if side and side != candidates and len(side) < config["k"]))
+            candidates = small or candidates
         campaign.attempts.append({
             "attempt": attempt, "program_id": pid, "question": question, "action": action, "text": text,
-            "predicted_release": predicted, "surprise": predicted != released,
+            "predicted_release": predicted, "surprise": predicted != released, "determined": determined,
             "guess": guess(candidates), "candidate_bands": len(candidates),
         })
         hr_seen = [o for o in reply.observations if o["department"] == "hr" and o["status"] == "answer"]
